@@ -1,0 +1,16 @@
+---
+galaxy_info:
+  author: z
+  description: Ansible role for configure network on RedHat/CentOS.
+  company:
+  license: license (BSD, MIT)
+  min_ansible_version: 1.6
+  platforms:
+  - name: EL
+    versions:
+    - 6
+    - 7
+  categories:
+  - networking
+  - system
+dependencies: []

@@ -1,0 +1,6 @@
+---
+# defaults file for ansible-role-network
+
+network_ethernet_interfaces: []
+network_bridge_interfaces: []
+network_bond_interfaces: []

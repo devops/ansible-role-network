@@ -1,0 +1,4 @@
+---
+# vars file for RedHat
+
+network_config_path: "/etc/sysconfig/network-scripts"

@@ -1,0 +1,41 @@
+# {{ ansible_managed }}
+
+{% if item.bootproto == 'static' %}
+NAME={{ item.device }}
+DEVICE={{ item.device }}
+TYPE=Ethernet
+ONBOOT=yes
+BOOTPROTO=none
+USERCTL=no
+NM_CONTROLLED=no
+{% if item.vlan is defined %}
+VLAN=yes
+{% endif %}
+{% if item.bridge is defined %}
+BRIDGE={{ item.bridge }}
+{% endif %}
+
+{% if item.address is defined %}
+IPADDR={{ item.address }}
+NETMASK={{ item.netmask | default("255.255.255.0") }}
+{% endif %}
+{% if item.gateway is defined %}
+GATEWAY={{ item.gateway }}
+{% endif %}
+{% endif %}
+
+{% if item.bootproto == 'dhcp' %}
+NAME={{ item.device }}
+DEVICE={{ item.device }}
+TYPE=Ethernet
+ONBOOT=yes
+BOOTPROTO=dhcp
+USERCTL=no
+NM_CONTROLLED=no
+{% if item.vlan is defined %}
+VLAN=yes
+{% endif %}
+{% if item.bridge is defined %}
+BRIDGE={{ item.bridge }}
+{% endif %}
+{% endif %}

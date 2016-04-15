@@ -1,0 +1,15 @@
+# {{ ansible_managed }}
+
+DEVICE={{ item.1 }}
+TYPE=Ethernet
+BOOTPROTO=none
+ONBOOT=yes
+USERCTL=no
+NM_CONTROLLED=no
+{% if item.0.vlan is defined %}
+VLAN=yes
+{% endif %}
+BRIDGE={{ item.0.device }}
+{% if item.0.bond_mode is defined %}
+BONDING_OPTS="mode={{ item.0.bond_mode }} miimon={{ item.0.bond_miimon|default(100) }}"
+{% endif %}

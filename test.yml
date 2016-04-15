@@ -1,0 +1,108 @@
+---
+# test files for ansible-role-network
+
+## Configure eth1 and eth2 of a host with static ip and a dhcp ip.
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_ethernet_interfaces:
+       - device: eth0
+         bootproto: static
+         address: "{{ admin_ip }}"
+         netmask: 255.255.255.0
+         gateway: "{{ admin_ip_gateway }}"
+       - device: eth1
+         bootproto: dhcp
+
+## Configure a bridge interface with multiple nics added to the bridge.
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_bridge_interfaces:
+       -  device: br1
+          address: 192.168.10.10
+          netmask: 255.255.255.0
+          gateway: 192.168.10.254
+          bootproto: static
+          stp: "on"
+          vlan: "yes"
+          ports: [eth2]
+
+## Configure a bond interface with an Active-Backup slave configuration.
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_bond_interfaces:
+        - device: bond0
+          bootproto: static
+          vlan: yes
+          address: 192.168.10.10
+          netmask: 255.255.255.0
+          gateway: 192.168.10.254
+          bond_mode: 1
+          bond_miimon: 100
+          bond_slaves: [eth3, eth4]
+
+## Configure a bonding interface with 802.3ad as the bonding mode and address is got via dhcp
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_bond_interfaces:
+        - device: bond1
+          bootproto: dhcp
+          vlan: yes
+          bond_mode: 4
+          bond_miimon: 100
+          bond_slaves: [eth5, eth6]
+
+## Configure a bond interface with an Active-Backup slave configuration and bridge to br2.
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_bond_interfaces:
+        - device: bond2
+          bootproto: static
+          vlan: yes
+          bond_mode: 1
+          bond_miimon: 100
+          bond_slaves: [eth7, eth8]
+          bridge: br2
+
+      network_bridge_interfaces:
+      - device: br2
+        bootproto: static
+        address: 192.168.20.20
+        netmask: 255.255.255.0
+        gateway: 192.168.20.254
+        stp: "on"
+        vlan: "yes"
+        ports: [bond2]
+        bond_mode: 1
+        bond_miimon: 100
+
+## Configure a bond with sub interface with an Active-Backup slave configuration.
+
+- hosts: servers01
+  roles:
+    - role: ansible-role-network
+      network_bond_interfaces:
+        - device: bond3
+          bootproto: static
+          vlan: yes
+          bond_mode: 1
+          bond_miimon: 100
+          bond_slaves: [eth9, eth10]
+        - device: bond3.1001
+          bootproto: static
+          vlan: yes
+          address: 192.168.30.10
+          netmask: 255.255.255.0
+          gateway: 192.168.10.254
+          bond_mode: 1
+          bond_miimon: 100
+          bond_slaves: []
