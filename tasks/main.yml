@@ -8,28 +8,28 @@
 # Ethernet
 - name: Create the network configuration file for ethernet devices.
   template: src=ethernet.j2 dest={{ network_config_path }}/ifcfg-{{ item.device }}
-  with_items: network_ethernet_interfaces
+  with_items: "{{ network_ethernet_interfaces }}"
   when: network_ethernet_interfaces is defined
   register: ethernet_result
 
 # Bridge
 - name: Create the network configuration file for bridge devices.
   template: src=bridge.j2 dest={{ network_config_path }}/ifcfg-{{ item.device }}
-  with_items: network_bridge_interfaces
+  with_items: "{{ network_bridge_interfaces }}"
   when: network_bridge_interfaces is defined
   register: bridge_result
 
 - name: Create the network configuration file for port on the bridge devices.
   template: src=bridge_port.j2 dest={{ network_config_path }}/ifcfg-{{ item.1 }}
   with_subelements:
-   - network_bridge_interfaces
+   - "{{ network_bridge_interfaces }}"
    - ports
   when: network_bridge_interfaces is defined
 
 # Bonding
 - name: Create the network configuration file for bond devices.
   template: src=bond.j2 dest={{ network_config_path }}/ifcfg-{{ item.device }}
-  with_items: network_bond_interfaces
+  with_items: "{{ network_bond_interfaces }}"
   when: network_bond_interfaces is defined
   register: bond_result
 
@@ -40,7 +40,7 @@
 - name: Create the network configuration file for slave in the bond devices.
   template: src=bond_slave.j2 dest={{ network_config_path }}/ifcfg-{{ item.1 }}
   with_subelements:
-   - network_bond_interfaces
+   - "{{ network_bond_interfaces }}"
    - bond_slaves
   when: network_bond_interfaces is defined
 
